@@ -4,7 +4,6 @@
   "version": "0.2.8",
   "author": "Ryan Day <soldair@gmail.com>",
   "keywords": [
-    "canvas",
     "qrcode",
     "barcode"
   ],
@@ -19,7 +18,6 @@
     "qrcode": "./bin/qrcode"
   },
   "dependencies": {
-    "canvas": ">= 0.4.3 <=1.0.4",
     "colors": "*",
     "bops": "0.0.6"
   },
@@ -27,12 +25,11 @@
     "express": "2.5.x",
     "browserify": "~2.29.0",
     "uglify-js": "1.2.x",
-    "canvasutil": "*",
     "tap": "*"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/soldair/node-qrcode.git"
+    "url": "git://github.com/bioform/node-qrcode.git"
   },
   "engines": {
     "node": ">=0.2.3"

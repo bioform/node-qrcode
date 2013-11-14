@@ -11,7 +11,6 @@
 
 var QRCodeLib = require(__dirname+'/lib/qrcode-draw')
 , terminalRender = require(__dirname+'/lib/termialrender.js')
-, Canvas = require('canvas')
 , fs = require('fs');
 
 
@@ -37,120 +36,6 @@ exports.errorCorrectLevels = QRCodeLib.QRErrorCorrectLevel;
 exports.getMaxChars = function(minErrorCorrectionLevel,width,moduleScale){
 	//TODO THIS NEEDS TO WORK
   console.log('this doesnt work yet. comming soon =)');
-};
-
-
-// returns Canvas Object with qr code drawn on it
-/*
-* String text, optional Object options, Function callback
-*/
-var draw = exports.draw = function(text,options,cb){
-
-	var args = Array.prototype.slice.call(arguments);
-	cb = args.pop();
-	if(typeof cb != 'function') {
-		throw new TypeError('last argument must be a function');
-	}
-	
-	text = args.shift();
-	options = args.shift()||{};
-  var textKeys = {'minimum':"L",'medium':"M",'high':"Q",'max':"H"}
-	if(options.errorCorrectLevel) {
-    var ec = options.errorCorrectLevel;  
-    if(textKeys[ec]){
-      options.errorCorrectLevel = textKeys[ec];
-    }
-  }
-
-//-------------^^^^^^^^^
-
-	//NOTE the width and height are determined from within the qr code lib and are not configurable from the outside yet
-  
-	var drawInstance = new QRCodeDraw();
-	drawInstance.draw(new Canvas(200,200),text,options,function(error,canvas){
-		cb(error,canvas)
-	});
-};
-
-//returns data uri for drawn qrcode png
-exports.toDataURL = exports.toDataURI = function(text,options,cb){
-
-  if(typeof options == 'function') {
-    cb = options;
-    options = {};
-  }
-
-  draw(text,options,function(error,canvas){
-    if(error) {
-      cb(error);
-    } else {
-      canvas.toDataURL(cb);
-    }
-  });
-}
-
-//synchronous PNGStream
-exports.toPNGStream = function (text, WSpath, options,cb) {
-
-  if(typeof options == 'function'){
-    cb = options;
-    options = {};
-  }
-
-  var out = fs.createWriteStream(WSpath);
-
-  draw(text, options, function (error,canvas) {
-    if(error) {
-      cb(error,'');
-    } else {
-      stream = canvas.createPNGStream();
-    }
-
-    stream.pipe(out);
-
-    stream.on('end', function () {
-      cb(error,'');
-    });
-
-    stream.pipe(out);
-    
-  });
-
-  return out;
-}
-
-//returns bytes written to file 
-exports.save = function(path,text,options,cb){
-
-  if(typeof options == 'function'){
-    cb = options;
-    options = {};
-  }
-
-	draw(text, options, function(error,canvas){
-
-		var fd,buf,fdAndBuf = function(){
-			fs.write(fd, buf, 0, buf.length, 0, function(error,written){
-				fs.close(fd);
-				if(cb) cb(error,written);
-			});
-		};
-
-		//run non dependent async calls at the same time ish
-		canvas.toBuffer(function(error, _buf){
-			if(error) return cb(error,0);
-			
-			buf = _buf
-			if(fd) fdAndBuf();
-		});
-
-		fs.open(path, 'w', 0666, function(err,_fd){
-			if(error) return cb(error,0);
-			fd = _fd
-			if(buf) fdAndBuf();
-		});
-
-	});
 };
 
 
