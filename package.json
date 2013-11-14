@@ -12,9 +12,6 @@
   "scripts": {
     "test": "tap test/url.js"
   },
-  "bin": {
-    "qrcode": "./bin/qrcode"
-  },
   "dependencies": {
     "colors": "*",
     "bops": "0.0.6"
