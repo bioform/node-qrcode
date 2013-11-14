@@ -10,8 +10,6 @@
   "main": "./qrcode.js",
   "homepage": "http://github.com/soldair/node-qrcode",
   "scripts": {
-    "pretest": "node build.js",
-    "prepublish": "node build.js",
     "test": "tap test/url.js"
   },
   "bin": {
